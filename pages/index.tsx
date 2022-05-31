@@ -1,10 +1,13 @@
-
+import { modalState } from '../atoms/modalAtom';
 import Head from 'next/head';
 import { Movie } from '../typings';
 import Header from '../components/Header';
 import Banner from '../components/Banner';
 import requests from '../utils/requests';
 import Row from '../components/Row';
+import useAuth from "../hooks/useAuth";
+import { useRecoilValue } from 'recoil';
+import Modal from '../components/Modal';
 
 interface Props {
   netflixOriginals: Movie[]
@@ -29,6 +32,12 @@ const Home = ({
   trendingNow,
 }: Props) => {
   
+  const {logout, loading} = useAuth();
+  const showModal = useRecoilValue(modalState)
+
+
+  if (loading) return null;
+
   return (
     <div className="relative scrollbar-hide h-screen bg-gradient-to-b  lg:h-[140vh]">
       <Head>
@@ -51,7 +60,7 @@ const Home = ({
           <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
-      {/*Modal */}
+      {showModal && <Modal />}
     </div>
   )
 }
